@@ -59,35 +59,44 @@ class FirstPersonController(Entity):
             return
 
         global baddie
-        baddie_relative = (self.rotation - baddie.rotation)[1]
-        baddie_rotation = abs((self.rotation - baddie.rotation)[1])
-        while  baddie_rotation > 360:
+        baddie.rotation_y += 1        
+        baddie_rotation = (self.rotation - baddie.rotation)[1]
+        baddie.setBillboardAxis(camera, 0)
+
+        #if baddie_rotation < 0:            
+        #    baddie_rotation = abs(baddie_rotation)            
+
+        while abs(baddie_rotation) > 360:
             baddie_rotation = baddie_rotation % 360
 
+        if baddie_rotation < 0:
+            baddie_rotation = 360 + baddie_rotation
+  
         baddie_angle_sides = (
-            (22.5, 67.5, 2),
-            (67.5, 112.5, 3),
-            (112.5, 157.5, 4),
+            (22.5, 67.5, 8),
+            (67.5, 112.5, 7),
+            (112.5, 157.5, 6),
             (157.5, 202.5, 5),
-            (202.5, 247.5, 6),
-            (247.5, 292.5, 7),
-            (292.5, 337.5, 8),
+            (202.5, 247.5, 4),
+            (247.5, 292.5, 3),
+            (292.5, 337.5, 2),
             (0, 22.5, 1),
             (337.5, 361, 1),
             )
         
-        side = [x[2] for x in baddie_angle_sides if baddie_rotation >= x[0] and baddie_rotation < x[1]][0]
-        
+        match_side = [x for x in baddie_angle_sides if baddie_rotation >= x[0] and baddie_rotation < x[1]]                
+        if len(match_side) == 0:
+            print("baddie_rotation", baddie_rotation)
 
         # facing us
-        baddie.side = side
-        if baddie.side == 0:
-            baddie.side = 1
-        
+        if len(match_side) > 0:
+            baddie.side = match_side[0][2]
+            if baddie.side == 0:
+                baddie.side = 1
+            
+            print(match_side, baddie.side)
 
-        print(baddie_rotation)
-
-        baddie.update_texture()
+            baddie.update_texture()
 
         speed_modifier = 1
 
