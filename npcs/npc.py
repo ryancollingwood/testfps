@@ -1,6 +1,6 @@
 from things import Thing
 from utils import load_textures
-from ursina import Entity
+from ursina import Entity, Sprite
 from math import atan, atan2, radians
 from ursina import Vec3
 
@@ -31,8 +31,8 @@ class Npc(Thing):
         self.side = 1
         self.animation = "s"
         self.frame = None
-
         self.setBillboardAxis()
+        # TODO maybe add a sprite to this?
 
     def get_sprite_name(self):
         return f"{self.base_name}_{self.animation}_{self.side}"

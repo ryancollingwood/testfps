@@ -59,12 +59,9 @@ class FirstPersonController(Entity):
             return
 
         global baddie
-        baddie.rotation_y += 1        
-        baddie_rotation = (self.rotation - baddie.rotation)[1]
-        baddie.setBillboardAxis(camera, 0)
+        baddie.rotation_y += 1
 
-        #if baddie_rotation < 0:            
-        #    baddie_rotation = abs(baddie_rotation)            
+        baddie_rotation = (self.rotation - baddie.rotation)[1]
 
         while abs(baddie_rotation) > 360:
             baddie_rotation = baddie_rotation % 360
@@ -88,7 +85,6 @@ class FirstPersonController(Entity):
         if len(match_side) == 0:
             print("baddie_rotation", baddie_rotation)
 
-        # facing us
         if len(match_side) > 0:
             baddie.side = match_side[0][2]
             if baddie.side == 0:
