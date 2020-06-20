@@ -60,39 +60,7 @@ class FirstPersonController(Entity):
 
         global baddie
         baddie.rotation_y += 1
-
-        baddie_rotation = (self.rotation - baddie.rotation)[1]
-
-        while abs(baddie_rotation) > 360:
-            baddie_rotation = baddie_rotation % 360
-
-        if baddie_rotation < 0:
-            baddie_rotation = 360 + baddie_rotation
-  
-        baddie_angle_sides = (
-            (22.5, 67.5, 8),
-            (67.5, 112.5, 7),
-            (112.5, 157.5, 6),
-            (157.5, 202.5, 5),
-            (202.5, 247.5, 4),
-            (247.5, 292.5, 3),
-            (292.5, 337.5, 2),
-            (0, 22.5, 1),
-            (337.5, 361, 1),
-            )
-        
-        match_side = [x for x in baddie_angle_sides if baddie_rotation >= x[0] and baddie_rotation < x[1]]                
-        if len(match_side) == 0:
-            print("baddie_rotation", baddie_rotation)
-
-        if len(match_side) > 0:
-            baddie.side = match_side[0][2]
-            if baddie.side == 0:
-                baddie.side = 1
-            
-            print(match_side, baddie.side)
-
-            baddie.update_texture()
+        baddie.update_facing(self.rotation)
 
         speed_modifier = 1
 

@@ -54,11 +54,43 @@ class Npc(Thing):
 
     def update_texture(self):
         texture_name = self.get_sprite_name()
-        #self.texture = self.sprites[texture_name]
         self.sprite.texture = self.sprites[texture_name]
 
     def push(self, who = None):
         return
+
+    def update_facing(self, relative_to_rotation):
+        relative_rotation = (relative_to_rotation - self.rotation)[1]
+
+        while abs(relative_rotation) > 360:
+            relative_rotation = relative_rotation % 360
+
+        if relative_rotation < 0:
+            relative_rotation = 360 + relative_rotation
+  
+        angle_sides = (
+            (22.5, 67.5, 8),
+            (67.5, 112.5, 7),
+            (112.5, 157.5, 6),
+            (157.5, 202.5, 5),
+            (202.5, 247.5, 4),
+            (247.5, 292.5, 3),
+            (292.5, 337.5, 2),
+            (0, 22.5, 1),
+            (337.5, 361, 1),
+            )
+        
+        match_side = [x for x in angle_sides if relative_rotation >= x[0] and relative_rotation < x[1]]                
+        if len(match_side) == 0:
+            raise Exception(f"Couldnt get a NPC sprite for relative_rotation: {relative_rotation}")
+
+        if len(match_side) > 0:
+            self.side = match_side[0][2]
+            if self.side == 0:
+                self.side = 1
+            
+            self.update_texture()
+
 
 
 
