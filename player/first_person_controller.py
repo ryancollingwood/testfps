@@ -1,7 +1,4 @@
-from ursina import *
-from ursina.raycaster import raycast
-from geom import build_cube_wall, build_wall, build_flat_wall, grid_place, item_place
-from geom import CUBE_SIZE, HALF_CUBE_SIZE
+from ursina.entity import Entity
 
 
 class FirstPersonController(Entity):
@@ -63,10 +60,6 @@ class FirstPersonController(Entity):
         global baddie
         baddie.rotation_y += 1
         baddie.update_facing(self.rotation)
-        try:
-            print(baddie.visible)
-        except Exception:
-            pass
 
         speed_modifier = 1
 
@@ -143,82 +136,8 @@ class FirstPersonController(Entity):
             self.smooth_camera = True
             self.position -= lerp(self.right, self.back, .5) * (1.3-back_right_ray.distance)
         elif right_ray.hit:
-
             self.smooth_camera = True
             self.position -= lerp(self.right, self.forward, .5) * (1.3-right_ray.distance)
-
         if not middle_ray.hit and not back_middle_ray.hit:
             self.position += self.direction * self.speed * time.dt
 
-        if left_ray.distance < 0.01 or right_ray.distance < 0.01 or middle_ray.distance < 0.01:
-            print(f"close {left_ray.distance}, {right_ray.distance}, {middle_ray.distance}")
-
-import npcs
-
-
-if __name__ == '__main__':
-    app = Ursina()
-    world = Entity()
-    Sky(color=color.gray)
-    Entity(model='plane', scale=100, color=color.yellow.tint(-.2), texture='white_cube', texture_scale=(100,100))
-    player = FirstPersonController()
-
-    tiles = dict()
-    for tile in ["brick_red", "fence_stone", "platformIndustrial_095", "platformIndustrial_106"]:
-        tiles[tile] = load_texture(tile, "resources/tiles/")
-
-    sprites = dict()
-    for sprite in ["mguard_s_1"]:
-        sprites[sprite] = load_texture(sprite, "resources/npcs/guard/")
-
-    level_blocks = list()
-    level_def = [
-        "######",
-        "#   ##",
-        "# #  #",
-        "###  #",
-        "#    #",
-        "# #########  ",
-        "# #@      |   ",
-        "# #  !  ###",
-        "# #     ###",
-        "# #-####",
-        "#    #",
-        "######",
-    ]
-
-    for z, row in enumerate(level_def):
-        for x, col in enumerate(row):
-            if col == "#":
-                level_blocks.append(
-                    build_cube_wall(world, x, z, tiles["brick_red"])
-                )
-            elif col == "|":
-                level_blocks.append(
-                    build_flat_wall(world, x, z,
-                                    tiles["platformIndustrial_095"],
-                                    False,
-                                    ))
-            elif col == "-":
-                door = build_flat_wall(
-                    world, x, z,
-                    tiles["platformIndustrial_095"],
-                    True
-                )
-                level_blocks.append(door)
-            elif col == "@":
-                player.position = item_place(x, z)
-            elif col == "!":
-                npc_place = item_place(x, z)
-
-                baddie = npcs.Npc(
-                    texture = sprites['mguard_s_1'],
-                    parent = world,
-                    x = npc_place[0],
-                    y = (CUBE_SIZE / 2),
-                    z = npc_place[2],
-                    rotation = Vec3(0,0,0),
-                    scale = (CUBE_SIZE, CUBE_SIZE -0.1, 0.1),
-                )
-
-    app.run()
