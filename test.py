@@ -1,5 +1,5 @@
 from ursina import *
-from ursina.ursinastuff import raycast
+from ursina.raycaster import raycast
 
 
 class FirstPersonController(Entity):
