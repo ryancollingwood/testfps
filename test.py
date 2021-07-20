@@ -36,7 +36,7 @@ class FirstPersonController(Entity):
         camera.near_clip_plane = 0.5
         mouse.locked = True
 
-        self.smooth_camera = False
+        self.smooth_camera = True
         self.rotation_speed = 1
         self.rotation_delta = 0
         self.update_rotation_x = False

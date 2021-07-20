@@ -4,7 +4,7 @@ from ursina.raycaster import raycast
 from geom import build_cube_wall, build_wall, build_flat_wall, grid_place, item_place
 from geom import CUBE_SIZE, HALF_CUBE_SIZE
 import npcs
-
+from things import Thing
 
 
 
@@ -17,6 +17,8 @@ if __name__ == '__main__':
     player = FirstPersonController(y=2, origin_y=-.5)
     player.gun = None
 
+    t = Thing(world, 0, 0)
+
     tiles = dict()
     for tile in ["brick_red", "fence_stone", "platformIndustrial_095", "platformIndustrial_106"]:
         tiles[tile] = load_texture(tile, "resources/tiles/")
@@ -27,18 +29,13 @@ if __name__ == '__main__':
 
     level_blocks = list()
     level_def = [
-        "######",
-        "#   ##",
-        "# #  #",
-        "###  #",
-        "#    #",
-        "# #########  ",
-        "# #@      |   ",
-        "# #  !  ###",
-        "# #     ###",
-        "# # ####",
-        "#    #",
-        "######",
+        "                 ",
+        "                 ",
+        "                 ",
+        "        @        ",
+        "                 ",
+        "                 ",
+        "                 ",
     ]
 
     for z, row in enumerate(level_def):
