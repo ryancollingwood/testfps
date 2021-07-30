@@ -1,7 +1,7 @@
 from ursina.entity import Entity
 from things import Thing
 
-class Player(Things):
+class Player(Thing):
 
     def __init__(self, **kwargs):
         super(Thing, self).__init__(
